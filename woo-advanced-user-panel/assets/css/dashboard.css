@@ -1,0 +1,65 @@
+.waup-dashboard {
+    --waup-primary: #2563eb;
+    --waup-surface: #ffffff;
+    --waup-border: #e5e7eb;
+    --waup-text: #111827;
+    background: var(--waup-surface);
+    border: 1px solid var(--waup-border);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 15px 35px -15px rgba(15, 23, 42, 0.25);
+    color: var(--waup-text);
+}
+
+.waup-dashboard__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.waup-dashboard__title {
+    font-size: clamp(1.5rem, 1.2vw + 1.2rem, 2.2rem);
+    font-weight: 700;
+    margin: 0;
+}
+
+.waup-tabs {
+    list-style: none;
+    display: flex;
+    gap: 0.75rem;
+    padding: 0;
+    margin: 0 0 1.5rem;
+}
+
+.waup-tabs button {
+    appearance: none;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    padding: 0.5rem 1.25rem;
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--waup-primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.waup-tabs button[aria-selected="true"],
+.waup-tabs button:hover {
+    background: var(--waup-primary);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.waup-dashboard__content {
+    min-height: 200px;
+}
+
+.waup-notice {
+    padding: 1rem;
+    border-radius: 8px;
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    color: var(--waup-primary);
+}
