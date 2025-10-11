@@ -13,6 +13,23 @@ This guide describes how to build an advanced customer dashboard plugin for WooC
    - Create a new directory inside `wp-content/plugins/` named `woo-advanced-user-panel`.
    - Inside it add empty `includes/`, `templates/`, and `assets/{css,js,images}` folders.
 
+### Quick Start Checklist (Day 1)
+Follow this mini-checklist the moment you sit down to begin the project. Each bullet links back to a single, tangible outcome so you can build momentum quickly.
+
+1. **Clone & branch**
+   - Pull the latest changes for your WordPress project repo and create a feature branch, e.g. `feature/waup-bootstrap`.
+2. **Scaffold folders**
+   - Run `mkdir -p wp-content/plugins/woo-advanced-user-panel/{includes,templates,assets/css,assets/js,assets/images}`.
+   - Commit this empty structure so teammates see where files will land.
+3. **Stub the main plugin file**
+   - Create `wp-content/plugins/woo-advanced-user-panel/woo-advanced-user-panel.php` with the minimal header and safety guard shown in Phase 1 below.
+   - Run `php -l` on the file to confirm there are no syntax errors, then commit.
+4. **Activate early**
+   - Use `wp plugin activate woo-advanced-user-panel` (via WP-CLI) to ensure the stub loads without fatal errors.
+   - Deactivate immediately afterward so you can continue iterating safely.
+5. **Log next steps**
+   - Open an issue or write a TODO list outlining the exact files you will tackle in Phase 1. This helps you resume quickly on the next session.
+
 ## Phase 1 – Bootstrap the Plugin
 1. **`woo-advanced-user-panel.php`**
    - Add the plugin header, guard against direct access, and require the loader class.
