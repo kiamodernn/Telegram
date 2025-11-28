@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moowin Casino Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0b1731;
+      --accent-blue: #2d95ff;
+      --success-green: #00f1a1;
+      --warning-orange: #ff8c29;
+      --text-primary: #ffffff;
+      --text-secondary: #b2bedc;
+      --card-purple: linear-gradient(135deg, #4b1b93, #ff5ec3);
+      --card-blue: linear-gradient(135deg, #0868f8, #0ed1f8);
+      --card-orange: linear-gradient(135deg, #ff8c29, #ffc857);
+      --header-gradient: linear-gradient(90deg, #1a2f6f, #4527a0);
+      --hero-gradient: linear-gradient(135deg, #0ac1d6, #0fd79e);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 270px 1fr 360px;
+      grid-template-rows: 80px 1fr;
+      grid-template-areas:
+        "sidebar header header"
+        "sidebar main right";
+      height: 100vh;
+      gap: 0;
+    }
+
+    .sidebar {
+      grid-area: sidebar;
+      background: #0b1731;
+      padding: 20px 18px 16px;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo {
+      font-family: 'Poppins', 'Inter', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      padding: 12px 10px;
+      margin-bottom: 18px;
+      background: linear-gradient(120deg, #ff5f6d, #ffc371, #2d95ff, #8c6ff8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .nav::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .nav::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item .icon {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+    }
+
+    .nav-item:hover {
+      box-shadow: 0 0 12px rgba(45, 149, 255, 0.6);
+      background: rgba(255, 255, 255, 0.04);
+      transform: translateX(4px);
+    }
+
+    .nav-item.active {
+      box-shadow: 0 0 14px rgba(45, 149, 255, 0.8), 0 0 0 1px rgba(45, 149, 255, 0.4);
+      background: rgba(45, 149, 255, 0.12);
+      border: 1px solid rgba(45, 149, 255, 0.2);
+    }
+
+    .support {
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .support .cta {
+      color: var(--text-primary);
+      margin-top: 8px;
+      padding: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      border-radius: 10px;
+      background: linear-gradient(120deg, rgba(45, 149, 255, 0.16), rgba(255, 140, 41, 0.16));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .socials {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .social-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      display: grid;
+      place-items: center;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .social-icon:hover {
+      box-shadow: 0 0 10px rgba(0, 241, 161, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .header {
+      grid-area: header;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--header-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 22px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(45, 149, 255, 0.6);
+    }
+
+    .btn.vip {
+      background: linear-gradient(120deg, #ffdf6f, #f39c12);
+      color: #0b1731;
+    }
+
+    .btn.deposit {
+      background: var(--warning-orange);
+      color: #0b1731;
+    }
+
+    .btn.play {
+      background: var(--accent-blue);
+      color: #0b1731;
+      box-shadow: 0 0 12px rgba(45, 149, 255, 0.8);
+    }
+
+    .wallet {
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      align-items: center;
+      gap: 12px;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .xp {
+      display: grid;
+      gap: 4px;
+      min-width: 160px;
+    }
+
+    .xp-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .xp-bar {
+      position: relative;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(45, 149, 255, 0.25);
+    }
+
+    .xp-bar::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 40%;
+      background: linear-gradient(90deg, #1f8bff, #42f6ff);
+      box-shadow: 0 0 12px rgba(66, 246, 255, 0.6);
+    }
+
+    .wallet-pill {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, transform 0.15s ease;
+    }
+
+    .user:hover {
+      box-shadow: 0 0 12px rgba(0, 241, 161, 0.6);
+      transform: translateY(-1px);
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2d95ff, #8c6ff8);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #0b1731;
+      box-shadow: 0 0 12px rgba(45, 149, 255, 0.7);
+    }
+
+    .main {
+      grid-area: main;
+      overflow-y: auto;
+      padding: 16px 20px 22px;
+      position: relative;
+    }
+
+    .main::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .main::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+    }
+
+    .hero {
+      background: var(--hero-gradient);
+      border-radius: 18px;
+      padding: 18px 22px;
+      display: grid;
+      grid-template-columns: 2fr 1.1fr;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+      min-height: 220px;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      filter: blur(30px);
+      right: -60px;
+      top: -40px;
+    }
+
+    .hero-content h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      text-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-content p {
+      margin: 10px 0 14px;
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 15px;
+    }
+
+    .cta-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .bomb {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      justify-self: end;
+    }
+
+    .bomb svg {
+      filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.25));
+    }
+
+    .progress {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 20px 0 10px;
+      letter-spacing: 0.4px;
+    }
+
+    .achievements, .game-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px rgba(45, 149, 255, 0.3);
+    }
+
+    .card .icon-pill {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #ff5ec3, #8b2cff);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .card h3 {
+      margin: 10px 0 6px;
+      font-size: 16px;
+      letter-spacing: 0.2px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 10px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #2d95ff, #00f1a1);
+      width: var(--value, 40%);
+      box-shadow: 0 0 10px rgba(45, 149, 255, 0.6);
+    }
+
+    .game-card {
+      min-height: 210px;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background-size: 200% 200%;
+      animation: floatBg 6s ease infinite;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .game-card .label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 0.4px;
+    }
+
+    .game-card .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .game-illustration {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+    }
+
+    .rightbar {
+      grid-area: right;
+      padding: 14px 12px 14px 10px;
+      background: rgba(0, 0, 0, 0.28);
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rightbar-inner {
+      position: sticky;
+      top: 10px;
+      display: grid;
+      gap: 12px;
+      max-height: calc(100vh - 20px);
+      overflow: auto;
+      padding-right: 8px;
+    }
+
+    .rightbar-inner::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .rightbar-inner::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+    }
+
+    .bonus-box {
+      background: linear-gradient(135deg, #ff5ec3, #ff8c29);
+      padding: 14px;
+      border-radius: 14px;
+      color: #0b1731;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.32);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bonus-box h3 {
+      margin: 6px 0;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .timer {
+      font-weight: 800;
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 6px 10px;
+      border-radius: 10px;
+    }
+
+    .vip-box {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, transform 0.15s ease;
+    }
+
+    .tab.active {
+      background: rgba(45, 149, 255, 0.2);
+      box-shadow: 0 0 10px rgba(45, 149, 255, 0.4);
+    }
+
+    .tab:hover {
+      transform: translateY(-1px);
+    }
+
+    .friends {
+      display: grid;
+      gap: 10px;
+    }
+
+    .friend {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .friend.offline {
+      opacity: 0.5;
+    }
+
+    .friend .actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .pill-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 800;
+      color: #0b1731;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    .pill-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(45, 149, 255, 0.5);
+    }
+
+    .pill-btn.accept { background: #00f1a1; }
+    .pill-btn.reject { background: #ff5e7a; }
+
+    .status {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .search {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 6px;
+    }
+
+    .search input {
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .sidebar-toggle {
+      display: none;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      padding: 8px 10px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    @keyframes floatBg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @media (max-width: 1200px) {
+      body { overflow: auto; }
+      .app {
+        grid-template-columns: 90px 1fr;
+        grid-template-areas:
+          "header header"
+          "main right";
+      }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 240px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        box-shadow: 8px 0 20px rgba(0, 0, 0, 0.35);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggle { display: inline-flex; }
+      .header { grid-column: 1 / -1; }
+      .nav-item span { display: inline; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">MOOWIN CASINO</div>
+      <div class="nav">
+        <div class="nav-item"><div class="icon">🎁</div><span>Bonus</span></div>
+        <div class="nav-item"><div class="icon">🎡</div><span>Wheel</span></div>
+        <div class="nav-item"><div class="icon">🏠</div><span>Home Page</span></div>
+        <div class="nav-item"><div class="icon">🏰</div><span>Casino Hub</span></div>
+        <div class="nav-item"><div class="icon">🚀</div><span>Crash</span></div>
+        <div class="nav-item"><div class="icon">🗼</div><span>Towers</span></div>
+        <div class="nav-item"><div class="icon">🎯</div><span>Roulette</span></div>
+        <div class="nav-item active"><div class="icon">💣</div><span>Mines</span></div>
+        <div class="nav-item"><div class="icon">🌟</div><span>VIP Club</span></div>
+        <div class="nav-item"><div class="icon">💸</div><span>Deposit Bonus</span></div>
+        <div class="nav-item"><div class="icon">🎈</div><span>Promotion</span></div>
+      </div>
+      <div class="support">
+        Live Support
+        <div class="cta">
+          <span>💬</span>
+          <div>
+            <div style="font-weight:700;color:#fff">Chat with us</div>
+            <div style="font-size:12px;">We reply in under 3 minutes</div>
+          </div>
+        </div>
+        <div class="socials">
+          <div class="social-icon" title="Discord">⚡</div>
+          <div class="social-icon" title="Twitter">🐦</div>
+          <div class="social-icon" title="YouTube">▶️</div>
+        </div>
+      </div>
+    </aside>
+
+    <header class="header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <button class="btn vip">👑 VIP Club</button>
+        <button class="btn deposit">💰 Deposit</button>
+      </div>
+      <div class="wallet">
+        <div class="xp" title="XP earned towards the next level">
+          <div class="xp-label"><span>XP</span><span>350 / 15000</span></div>
+          <div class="xp-bar"></div>
+        </div>
+        <div class="wallet-pill">🪙 <span>2,202.00</span></div>
+        <div class="user" title="Player settings">
+          <div class="avatar">N</div>
+          <div>
+            <div style="font-weight:700;">Neomodeon</div>
+            <div style="color:var(--text-secondary); font-size:12px;">Level 7</div>
+          </div>
+          <div style="margin-left:8px;">▾</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="hero">
+        <div class="hero-content">
+          <h1>Play Mines with Moowin Casino</h1>
+          <p>Try your luck and don't get exploded... Keep the streaks alive and climb the VIP ladder.</p>
+          <div class="cta-row">
+            <button class="btn play">▶️ Play — $1206.56</button>
+            <div class="wallet-pill" style="background: rgba(255,255,255,0.16);">⚡ Nearly Drop</div>
+          </div>
+        </div>
+        <div class="bomb" aria-label="Cartoon bomb illustration">
+          <svg viewBox="0 0 240 240" width="180" height="180">
+            <defs>
+              <linearGradient id="bombBody" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1b244a" />
+                <stop offset="100%" stop-color="#2d95ff" />
+              </linearGradient>
+              <linearGradient id="fuse" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ffdf6f" />
+                <stop offset="100%" stop-color="#ff5e7a" />
+              </linearGradient>
+            </defs>
+            <circle cx="120" cy="130" r="80" fill="url(#bombBody)" stroke="#0d132c" stroke-width="6" />
+            <ellipse cx="120" cy="150" rx="60" ry="38" fill="rgba(0,0,0,0.25)" />
+            <path d="M120 50 C140 36 170 34 190 46" stroke="#0d132c" stroke-width="16" fill="none" stroke-linecap="round" />
+            <path d="M188 46 C196 38 210 34 218 46" stroke="url(#fuse)" stroke-width="10" fill="none" stroke-linecap="round" />
+            <circle cx="220" cy="40" r="12" fill="#ff8c29" stroke="#ffd166" stroke-width="3" />
+            <circle cx="220" cy="40" r="6" fill="#ffd166" />
+            <path d="M90 120 q30 -26 60 0" stroke="#ff8c29" stroke-width="8" fill="none" stroke-linecap="round" />
+            <path d="M94 110 q-10 16 0 26" stroke="#0b1731" stroke-width="6" fill="none" stroke-linecap="round" />
+            <path d="M146 110 q10 16 0 26" stroke="#0b1731" stroke-width="6" fill="none" stroke-linecap="round" />
+            <circle cx="96" cy="120" r="12" fill="#fff" />
+            <circle cx="146" cy="120" r="12" fill="#fff" />
+            <circle cx="96" cy="120" r="6" fill="#0b1731" />
+            <circle cx="146" cy="120" r="6" fill="#0b1731" />
+            <path d="M94 160 q26 24 52 0" stroke="#0b1731" stroke-width="10" fill="none" stroke-linecap="round" />
+          </svg>
+        </div>
+      </section>
+
+      <section class="progress">
+        <div class="section-title">Achievements</div>
+        <div class="achievements">
+          <div class="card">
+            <div class="icon-pill">⚡</div>
+            <h3>Push Your Luck</h3>
+            <p>Survive 3 mines in a row without exploding.</p>
+            <div class="progress-bar" title="Progress to completion"><span style="--value:60%"></span></div>
+          </div>
+          <div class="card">
+            <div class="icon-pill" style="background: linear-gradient(135deg, #0ed1f8, #2d95ff);">🎮</div>
+            <h3>Game Stopper</h3>
+            <p>Cash out with at least 5x multiplier.</p>
+            <div class="progress-bar"><span style="--value:32%"></span></div>
+          </div>
+          <div class="card">
+            <div class="icon-pill" style="background: linear-gradient(135deg, #ff8c29, #ffd166);">💎</div>
+            <h3>Big Fella</h3>
+            <p>Win 10,000 coins across casino games.</p>
+            <div class="progress-bar"><span style="--value:72%"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="progress">
+        <div class="section-title">Casino Worlds</div>
+        <div class="game-cards">
+          <div class="card game-card" style="background: linear-gradient(135deg, #44107a, #ff7a18);">
+            <div class="label">Nearly Drop</div>
+            <div class="game-illustration">
+              <svg width="140" height="140" viewBox="0 0 200 200" aria-label="Roulette wheel">
+                <circle cx="100" cy="100" r="70" fill="#1b0d2e" stroke="#ffdf6f" stroke-width="6" />
+                <circle cx="100" cy="100" r="54" fill="#ff5ec3" stroke="#2d95ff" stroke-width="8" stroke-dasharray="14 14" />
+                <circle cx="100" cy="100" r="30" fill="#fff" stroke="#ff8c29" stroke-width="6" />
+                <circle cx="100" cy="100" r="10" fill="#2d95ff" />
+              </svg>
+            </div>
+            <div class="footer">
+              <div>
+                <div style="font-weight:800;">Roulette</div>
+                <div style="color: rgba(255,255,255,0.8); font-size:12px;">Spin & rain coins</div>
+              </div>
+              <button class="btn play">Play</button>
+            </div>
+          </div>
+
+          <div class="card game-card" style="background: linear-gradient(135deg, #0a2a5e, #0ed1f8);">
+            <div class="label">Nearly Drop</div>
+            <div class="game-illustration">
+              <svg width="140" height="140" viewBox="0 0 200 200" aria-label="Crash rocket">
+                <rect x="92" y="30" width="16" height="40" rx="8" fill="#fff" />
+                <path d="M100 50 L130 110 L70 110 Z" fill="#ff8c29" />
+                <rect x="88" y="100" width="24" height="60" rx="10" fill="#2d95ff" />
+                <path d="M100 160 L120 190 L80 190 Z" fill="#ff5ec3" />
+                <circle cx="100" cy="76" r="10" fill="#0a2a5e" stroke="#fff" stroke-width="3" />
+                <path d="M74 118 Q100 92 126 118" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="footer">
+              <div>
+                <div style="font-weight:800;">Crash</div>
+                <div style="color: rgba(255,255,255,0.8); font-size:12px;">Ride the rocket</div>
+              </div>
+              <button class="btn play">Play</button>
+            </div>
+          </div>
+
+          <div class="card game-card" style="background: linear-gradient(135deg, #ff8c29, #ffd166);">
+            <div class="label">Nearly Drop</div>
+            <div class="game-illustration">
+              <svg width="140" height="140" viewBox="0 0 200 200" aria-label="Coin towers">
+                <rect x="50" y="80" width="30" height="80" rx="10" fill="#ffd166" stroke="#ff5e7a" stroke-width="4" />
+                <rect x="90" y="60" width="30" height="100" rx="10" fill="#ffdf6f" stroke="#ff8c29" stroke-width="4" />
+                <rect x="130" y="90" width="30" height="70" rx="10" fill="#ffb347" stroke="#ff5e7a" stroke-width="4" />
+                <circle cx="105" cy="50" r="18" fill="#fff" stroke="#ff5e7a" stroke-width="4" />
+                <path d="M90 130 q15 -24 30 0" stroke="#ff5e7a" stroke-width="6" fill="none" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="footer">
+              <div>
+                <div style="font-weight:800;">Towers</div>
+                <div style="color: rgba(255,255,255,0.8); font-size:12px;">Gold rush climb</div>
+              </div>
+              <button class="btn play">Play</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="rightbar">
+      <div class="rightbar-inner">
+        <div class="bonus-box">
+          <div class="timer">⏱ 27:40</div>
+          <h3>Free Bonus</h3>
+          <p style="margin:0; font-weight:600;">Claim loot chest before the timer ends.</p>
+          <svg width="180" height="120" viewBox="0 0 200 140" aria-label="Bonus chest" style="position:absolute; right: -10px; bottom: -8px; opacity:0.9;">
+            <rect x="30" y="60" width="140" height="60" rx="12" fill="#ffc371" stroke="#ff8c29" stroke-width="6" />
+            <rect x="40" y="34" width="120" height="40" rx="10" fill="#ffdf6f" stroke="#ff5e7a" stroke-width="6" />
+            <circle cx="100" cy="90" r="12" fill="#fff" stroke="#ff5e7a" stroke-width="4" />
+            <path d="M100 78 v22" stroke="#ff5e7a" stroke-width="4" />
+          </svg>
+        </div>
+
+        <div class="vip-box">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="icon-pill" style="background: linear-gradient(135deg, #8c6ff8, #2d95ff);">♦</div>
+            <div>
+              <div style="font-weight:800;">VIP Program</div>
+              <div style="color: var(--text-secondary); font-size:12px;">Unlock rare perks</div>
+            </div>
+            <button class="btn play" style="padding:8px 12px; margin-left:auto;">Join</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="tabs">
+            <div class="tab">Chat</div>
+            <div class="tab">Messages</div>
+            <div class="tab active">Friends</div>
+          </div>
+          <div class="friends">
+            <div class="friend">
+              <div class="avatar" style="background: linear-gradient(135deg, #ff5ec3, #ff8c29);">A</div>
+              <div>
+                <div style="font-weight:700;">Arcadium</div>
+                <div class="status">Friend request</div>
+              </div>
+              <div class="actions">
+                <button class="pill-btn accept">✅</button>
+                <button class="pill-btn reject">✖️</button>
+              </div>
+            </div>
+            <div class="friend">
+              <div class="avatar" style="background: linear-gradient(135deg, #0ed1f8, #2d95ff);">L</div>
+              <div>
+                <div style="font-weight:700;">LuckyFox</div>
+                <div class="status">Friend request</div>
+              </div>
+              <div class="actions">
+                <button class="pill-btn accept">✅</button>
+                <button class="pill-btn reject">✖️</button>
+              </div>
+            </div>
+            <div class="friend">
+              <div class="avatar" style="background: linear-gradient(135deg, #ffd166, #ff8c29);">Q</div>
+              <div>
+                <div style="font-weight:700;">QuickSpin</div>
+                <div class="status">Playing TA Runner 2</div>
+              </div>
+              <div style="font-size:20px;">🟢</div>
+            </div>
+            <div class="friend">
+              <div class="avatar" style="background: linear-gradient(135deg, #2d95ff, #8c6ff8);">S</div>
+              <div>
+                <div style="font-weight:700;">Starline</div>
+                <div class="status">In lobby</div>
+              </div>
+              <div style="font-size:20px;">🟢</div>
+            </div>
+            <div class="friend offline">
+              <div class="avatar" style="background: linear-gradient(135deg, #4b1b93, #2d95ff);">B</div>
+              <div>
+                <div style="font-weight:700;">BitRunner</div>
+                <div class="status">Offline</div>
+              </div>
+              <div style="font-size:20px;">⚪</div>
+            </div>
+            <div class="friend offline">
+              <div class="avatar" style="background: linear-gradient(135deg, #ff5ec3, #0ed1f8);">M</div>
+              <div>
+                <div style="font-weight:700;">Moonbase</div>
+                <div class="status">Offline</div>
+              </div>
+              <div style="font-size:20px;">⚪</div>
+            </div>
+          </div>
+          <div class="search">
+            <span>🔍</span>
+            <input type="text" placeholder="Find friends" />
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebarToggle');
+
+    toggle?.addEventListener('click', () => {
+      sidebar?.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
